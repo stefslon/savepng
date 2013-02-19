@@ -18,6 +18,8 @@ Where,
 
 ## Speed and File Size Comparison
 
+Note: PngEncoder in the figure and tables below is [objectplanet's PngEncoder](http://objectplanet.com/pngencoder/), which is the only other fast alternative I was able to find.
+
 ![alt text](https://raw.github.com/stefslon/savepng/master/Benchmark_Results.png "Performance Comparison")
 
 ### Save Time [sec]
