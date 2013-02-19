@@ -1,6 +1,6 @@
 function savepng(CDATA,filename,varargin) %#ok<INUSD>
 % SAVEPNG
-%   Very fast PNG saving routine.
+%   Very fast PNG image compression routine.
 %
 %   Input syntax is:
 %   savepng(CDATA,filename[,Compression]);
@@ -9,7 +9,8 @@ function savepng(CDATA,filename,varargin) %#ok<INUSD>
 %       Compression     A number between 0 and 4095 controlling the amount of 
 %                       compression to try to achieve with PNG file. 0 implies
 %                       no compresson, fastest option. 4095 implies the most
-%                       amount of compression, slowest option.
+%                       amount of compression, slowest option. Default
+%                       value is 8.
 %
 %   Example:
 %       img     = getframe(gcf);
