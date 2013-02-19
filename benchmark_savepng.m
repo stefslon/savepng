@@ -1,9 +1,13 @@
 %
-%   Benchmark savepng with reference to built-in imwrite
+%   Benchmark savepng with reference to built-in imwrite and 
+%   objectplanet's PngEncoder
+%
+%   objectplanet's PngEncoder can be obtained here:
+%   http://objectplanet.com/pngencoder/
 %
 
 N   = 30;               % Number of samples in each test
-Q   = [1 4 8 64 4095];    % Compression levels to test
+Q   = [1 4 8 64 4095];  % Compression levels to test
 
 Nq  = numel(Q);
 
@@ -67,16 +71,18 @@ for iQ=1:Nq,
     end
 end
 
-% Summarize results
+% Summarize results in a GitHub flavours markdown format
 fprintf('\nSave Time [sec]\n');
-fprintf('%10s\t %10s\t %10s\t %10s\t %10s\n ','Quality','IMWRITE','PNGENCODER','SAVEPNG','Improvement');
-fprintf('%10d\t %10f\t %10f\t %10f\t %10f\n ', ...
+fprintf('%10s\t| %10s\t| %10s\t| %10s\t| %10s\t| \n ','Quality','IMWRITE','PNGENCODER','SAVEPNG','Improvement');
+fprintf('%10s\t| %10s\t| %10s\t| %10s\t| %10s\t| \n ','----','----','----','----','----');
+fprintf('%10d\t| %10f\t| %10f\t| %10f\t| %10f\t| \n ', ...
     cat(1,Q,squeeze(mean(testTime,1)).',mean(testTime(:,:,1)./testTime(:,:,3),1)));
 
 
 fprintf('\nFile Size [bytes]\n');
-fprintf('%10s\t %10s\t %10s\t %10s\t %10s\n ','Quality','IMWRITE','PNGENCODER','SAVEPNG','Improvement');
-fprintf('%10d\t %10.2f\t %10.2f\t %10.2f\t %10f\n ', ...
+fprintf('%10s\t| %10s\t| %10s\t| %10s\t| %10s\t| \n ','Quality','IMWRITE','PNGENCODER','SAVEPNG','Improvement');
+fprintf('%10s\t| %10s\t| %10s\t| %10s\t| %10s\t| \n ','----','----','----','----','----');
+fprintf('%10d\t| %10.2f\t| %10.2f\t| %10.2f\t| %10f\t| \n ', ...
     cat(1,Q,squeeze(mean(testSize,1)).',mean(testSize(:,:,1)./testSize(:,:,3),1)));
 
 % Generate graph

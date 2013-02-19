@@ -1,10 +1,9 @@
+function savepng(CDATA,filename,varargin) %#ok<INUSD>
+% SAVEPNG
+%   Very fast PNG saving routine.
 %
-%   PNG encoding routine based on MINIZ library:
-%   http://code.google.com/p/miniz/
-%
-%   The syntax is:
-%
-%       savepng(CDATA,filename[,Compression]);
+%   Input syntax is:
+%   savepng(CDATA,filename[,Compression]);
 %
 %   Optional parameters:
 %       Compression     A number between 0 and 4095 controlling the amount of 
@@ -16,14 +15,20 @@
 %       img     = getframe(gcf);
 %       savepng(img.cdata,'example.png');
 %
+%   PNG encoding routine based on public-domain MINIZ library:
+%   http://code.google.com/p/miniz/
+%
 
-% Author: S.Slonevskiy, 02/13/2013
+% Author: S.Slonevskiy, 02/18/2013
 % File bug reports at: 
-%       https://github.com/stefslon/exportToPPTX/issues
+%       https://github.com/stefslon/savepng/issues
 
 % Versions:
-%   02/13/2013, Initial version
-
+%   02/18/2013, Initial version
 
 % Compile string
-mex savepng.c -DMINIZ_NO_TIME -DMINIZ_NO_ARCHIVE_APIS -DMINIZ_NO_ARCHIVE_WRITING_APIS -DMINIZ_NO_ZLIB_APIS -DMINIZ_NO_ZLIB_COMPATIBLE_NAMES 
+try
+    mex savepng.c -DMINIZ_NO_TIME -DMINIZ_NO_ARCHIVE_APIS -DMINIZ_NO_ARCHIVE_WRITING_APIS -DMINIZ_NO_ZLIB_APIS -DMINIZ_NO_ZLIB_COMPATIBLE_NAMES
+catch
+    error('Sorry, auto-compilation failed.');
+end
