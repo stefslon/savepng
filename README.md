@@ -1,6 +1,7 @@
 savepng
 =======
 
+![alt text](https://raw.github.com/stefslon/savepng/master/Benchmark_Results.png "Performance Comparison")
 
 Save Time [sec]
 
