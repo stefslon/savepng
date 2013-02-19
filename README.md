@@ -1,6 +1,6 @@
 ## Overview
 
-savepng is a very efficient PNG image compression routine that outperforms MatLab's built-in imwrite in compression times and smaller file sizes.
+savepng is a very efficient PNG image compression routine that outperforms MatLab's built-in imwrite in compression times and produced file sizes. For a typical figure size at the default compression level, savepng is ~5.8 times faster, with file size only 17% bigger than imwrite. At the highest compression level, savepng is still ~2.8 times faster, with produced file sizes 15% smaller.
 
 PNG encoding is based on public-domain [MINIZ library](http://code.google.com/p/miniz/).
 
