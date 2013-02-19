@@ -3,6 +3,7 @@ savepng
 
 
 Save Time [sec]
+
 |   Quality	|    IMWRITE	| PNGENCODER	|    SAVEPNG	| Improvement	| 
 |       ----	|       ----	|       ----	|       ----	|       ----	| 
 |          1	|   0.141927	|   0.064678	|   0.025635	|   5.727868	| 
@@ -12,6 +13,7 @@ Save Time [sec]
 |       4095	|   0.128502	|   0.052923	|   0.046395	|   2.777765	| 
  
 File Size [bytes]
+
 |   Quality	|    IMWRITE	| PNGENCODER	|    SAVEPNG	| Improvement	| 
 |       ----	|       ----	|       ----	|       ----	|       ----	| 
 |          1	|   69394.53	|  107448.83	|   96119.83	|   0.727982	| 
