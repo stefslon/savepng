@@ -791,7 +791,7 @@ size_t tdefl_compress_mem_to_mem(void *pOut_buf, size_t out_buf_len, const void 
 //  Function returns a pointer to the compressed data, or NULL on failure.
 //  *pLen_out will be set to the size of the PNG image file.
 //  The caller must free() the returned heap block (which will typically be larger than *pLen_out) when it's no longer needed.
-void *tdefl_write_image_to_png_file_in_memory(const void *pImage, int w, int h, int num_chans, size_t *pLen_out);
+//void *tdefl_write_image_to_png_file_in_memory(const void *pImage, int w, int h, int num_chans, size_t *pLen_out);
 
 // Output stream interface. The compressor uses this interface to write compressed data. It'll typically be called TDEFL_OUT_BUF_SIZE at a time.
 typedef mz_bool (*tdefl_put_buf_func_ptr)(const void* pBuf, int len, void *pUser);
@@ -899,15 +899,15 @@ typedef unsigned char mz_validate_uint64[sizeof(mz_uint64)==8 ? 1 : -1];
 
 #define MZ_ASSERT(x) assert(x)
 
-#ifdef MINIZ_NO_MALLOC
-  #define MZ_MALLOC(x) NULL
-  #define MZ_FREE(x) (void)x, ((void)0)
-  #define MZ_REALLOC(p, x) NULL
-#else MINIZ_NO_MALLOC
-    /* Redefine memory allocation routines to use MatLab's own */
+#ifdef MINIZ_ML_MALLOC
     #define MZ_MALLOC(x) mxMalloc(x)
     #define MZ_FREE(x) mxFree(x)
     #define MZ_REALLOC(p, x) mxRealloc(p, x)
+#else
+    /* Redefine memory allocation routines to use MatLab's own */
+    #define MZ_MALLOC(x) malloc(x)
+    #define MZ_FREE(x) free(x)
+    #define MZ_REALLOC(p, x) realloc(p, x)
 #endif
 
 #define MZ_MAX(a,b) (((a)>(b))?(a):(b))

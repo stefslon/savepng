@@ -25,6 +25,7 @@
 // 
 // % Versions:
 // %   02/18/2013, Initial version
+// %   02/22/2013, Some miniz.c fixes to allow for compilation on LCC
 
 #include <stdio.h>
 #include <stdlib.h>
