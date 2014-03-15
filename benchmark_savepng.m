@@ -6,8 +6,8 @@
 %   http://objectplanet.com/pngencoder/
 %
 
-N   = 30;               % Number of samples in each test
-C   = [1 4 8 64 4095];  % Compression levels to test
+N   = 30;                       % Number of samples in each test
+C   = [1 2 3 4 5 6 7 8 9 10];   % Compression levels to test
 
 Nc  = numel(C);
 
@@ -28,10 +28,10 @@ end
 
 figure('Renderer','zbuffer','Color','w');
 pos = get(gcf,'Position');
-set(gcf,'Position',[pos(1) pos(2) pos(3)*2 pos(4)*2]);
+set(gcf,'Position',[pos(1) pos(2) pos(3)*1.5 pos(4)*1.5]);
 movegui(gcf,'center');
 Z = peaks(100);
-mesh(Z);
+surf(Z);
 
 for iC=1:Nc,
     for iN=1:N,
@@ -73,17 +73,17 @@ end
 
 % Summarize results in a GitHub flavours markdown format
 fprintf('\nSave Time [sec]\n\n');
-fprintf('| %10s\t| %10s\t| %10s\t| %10s\t| %10s\t| \n ','Compression','IMWRITE','PNGENCODER','SAVEPNG','Improvement');
-fprintf('| %10s\t| %10s\t| %10s\t| %10s\t| %10s\t| \n ','----','----','----','----','----');
-fprintf('| %10d\t| %10f\t| %10f\t| %10f\t| %10f\t| \n ', ...
+fprintf('| %10s\t| %10s\t| %10s\t| %10s\t| %10s\t| \n','Compression','IMWRITE','PNGENCODER','SAVEPNG','Improvement');
+fprintf('| %10s\t| %10s\t| %10s\t| %10s\t| %10s\t| \n','----','----','----','----','----');
+fprintf('| %10d\t| %10f\t| %10f\t| %10f\t| %10.1f\t| \n', ...
     cat(1,C,squeeze(mean(testTime,1)).',mean(testTime(:,:,1)./testTime(:,:,3),1)));
 
 
 fprintf('\nFile Size [bytes]\n\n');
-fprintf('| %10s\t| %10s\t| %10s\t| %10s\t| %10s\t| \n ','Compression','IMWRITE','PNGENCODER','SAVEPNG','Improvement');
-fprintf('| %10s\t| %10s\t| %10s\t| %10s\t| %10s\t| \n ','----','----','----','----','----');
-fprintf('| %10d\t| %10.2f\t| %10.2f\t| %10.2f\t| %10f\t| \n ', ...
-    cat(1,C,squeeze(mean(testSize,1)).',mean(testSize(:,:,1)./testSize(:,:,3),1)));
+fprintf('| %10s\t| %10s\t| %10s\t| %10s\t| %10s\t| \n','Compression','IMWRITE','PNGENCODER','SAVEPNG','Improvement');
+fprintf('| %10s\t| %10s\t| %10s\t| %10s\t| %10s\t| \n','----','----','----','----','----');
+fprintf('| %10d\t| %10.2f\t| %10.2f\t| %10.2f\t| %9.2f%%\t| \n', ...
+    cat(1,C,squeeze(mean(testSize,1)).',mean(testSize(:,:,3)./testSize(:,:,1),1)*100));
 
 % Generate graph
 close(gcf);

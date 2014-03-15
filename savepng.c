@@ -5,11 +5,11 @@
 // %   savepng(CDATA,filename[,Compression]);
 // %
 // %   Optional parameters:
-// %       Compression     A number between 0 and 4095 controlling the amount of 
+// %       Compression     A number between 0 and 10 controlling the amount of 
 // %                       compression to try to achieve with PNG file. 0 implies
-// %                       no compresson, fastest option. 4095 implies the most
+// %                       no compresson, fastest option. 10 implies the most
 // %                       amount of compression, slowest option. Default
-// %                       value is 8.
+// %                       value is 4.
 // %
 // %   Example:
 // %       img     = getframe(gcf);
@@ -26,6 +26,8 @@
 // % Versions:
 // %   02/18/2013, Initial version
 // %   02/22/2013, Some miniz.c fixes to allow for compilation on LCC
+// %   03/14/2014, Brought miniz.c to the latest version r63 (from Oct 13, 2013)
+// %               Changed compression limits from 0 to 10 to align with miniz
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -34,7 +36,6 @@
 #include "matrix.h"
         
 #include "miniz.c"
-
 
 /* The gateway function */
 void mexFunction( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
@@ -53,7 +54,7 @@ void mexFunction( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
     size_t filelen;
     
     /* Default number of probes */
-    max_probes = 8;
+    max_probes = 4;
     
     /* Check for proper number of arguments */
     if(nrhs<2) {
@@ -91,7 +92,7 @@ void mexFunction( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
     /* Fetch output filename */
     filenamelen = mxGetN(prhs[1])*sizeof(mxChar)+1;
     filename = mxMalloc(filenamelen);
-    mxGetString(prhs[1], filename, (mwSize)filenamelen);   
+    mxGetString(prhs[1], filename, (mwSize)filenamelen);
     
     /* some debug information */
     // mexPrintf("Input dimensions %d by %d \n",width,height);
@@ -99,6 +100,8 @@ void mexFunction( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
     // mexPrintf("Input filename %s \n",filename);
     
     /* Convert MatLab image to raw pixels */
+    // indata format: RRRRRR..., GGGGGG..., BBBBBB...
+    // outdata format: RGB, RGB, RGB, ... 
     imgdata = mxMalloc(width * height * 3);
     idx = 0;
     for(y = 0; y < height; y++)
@@ -110,12 +113,12 @@ void mexFunction( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
             imgdata[idx++] = indata[2*width*height + x*height + y]; /* blue */
             //imgdata[idx++] = 255;               /* alpha */
         }
-    }
+    }    
     
     /* Encode PNG in memory */
     // Parameter "3" implies RGB pixel format
-    outdata = tdefl_write_image_to_png_file_in_memory(imgdata, width, height, max_probes, 3, &filelen);
-    
+    outdata = tdefl_write_image_to_png_file_in_memory_ex(imgdata, width, height, 3, &filelen, max_probes, MZ_FALSE);
+	
     /* Write to file */
     file = fopen(filename, "wb" );
     if(!file) return 0;

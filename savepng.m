@@ -6,11 +6,11 @@ function savepng(CDATA,filename,varargin) %#ok<INUSD>
 %   savepng(CDATA,filename[,Compression]);
 %
 %   Optional parameters:
-%       Compression     A number between 0 and 4095 controlling the amount of 
+%       Compression     A number between 0 and 10 controlling the amount of 
 %                       compression to try to achieve with PNG file. 0 implies
-%                       no compresson, fastest option. 4095 implies the most
+%                       no compresson, fastest option. 10 implies the most
 %                       amount of compression, slowest option. Default
-%                       value is 8.
+%                       value is 4.
 %
 %   Example:
 %       img     = getframe(gcf);
@@ -27,10 +27,12 @@ function savepng(CDATA,filename,varargin) %#ok<INUSD>
 % Versions:
 %   02/18/2013, Initial version
 %	02/22/2013, Added another switch to MEX compile
+%   03/14/2014, Brought miniz.c to the latest version r63 (from Oct 13, 2013)
+%               Changed compression limits from 0 to 10 to align with miniz
 
 % Compile string
 try
-    mex savepng.c -DMINIZ_ML_MALLOC -DMINIZ_NO_TIME -DMINIZ_NO_ARCHIVE_APIS -DMINIZ_NO_ARCHIVE_WRITING_APIS -DMINIZ_NO_ZLIB_APIS -DMINIZ_NO_ZLIB_COMPATIBLE_NAMES
+    mex savepng.c -DMINIZ_NO_TIME -DMINIZ_NO_ARCHIVE_APIS -DMINIZ_NO_ARCHIVE_WRITING_APIS -DMINIZ_NO_ZLIB_APIS -DMINIZ_NO_ZLIB_COMPATIBLE_NAMES
 catch
     error('Sorry, auto-compilation failed.');
 end
