@@ -11,10 +11,16 @@ function savepng(CDATA,filename,varargin) %#ok<INUSD>
 %                       no compresson, fastest option. 10 implies the most
 %                       amount of compression, slowest option. Default
 %                       value is 4.
+%       Resolution      A number expressed in Dots-Per-Inch (DPI) that gets 
+%                       embedded into a saved file. Default resolution is 96 DPI.
 %
-%   Example:
+%   Example 1:
 %       img     = getframe(gcf);
 %       savepng(img.cdata,'example.png');
+%
+%   Example 2:
+%       img     = getframe(gcf);
+%       savepng(img.cdata,'exampleHighRes.png',10,300);
 %
 %   PNG encoding routine based on public-domain MINIZ library:
 %   http://code.google.com/p/miniz/
@@ -29,6 +35,7 @@ function savepng(CDATA,filename,varargin) %#ok<INUSD>
 %	02/22/2013, Added another switch to MEX compile
 %   03/14/2014, Brought miniz.c to the latest version r63 (from Oct 13, 2013)
 %               Changed compression limits from 0 to 10 to align with miniz
+%   08/04/2014, Added option to command image resolution in DPI
 
 % Compile string
 try

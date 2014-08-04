@@ -46,6 +46,7 @@ void mexFunction( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
     unsigned char max_probes;       /* compression level */
     const mwSize *dim_array; 
     unsigned x, y, chan, idx;
+    unsigned dpm;                   /* dots per meter */
     unsigned char *outdata;
     FILE* file;
     
@@ -56,14 +57,22 @@ void mexFunction( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
     /* Default number of probes */
     max_probes = 4;
     
+    /* Default image resolution */
+    dpm = (96.0*39.36996);
+    
     /* Check for proper number of arguments */
     if(nrhs<2) {
         mexErrMsgIdAndTxt("savepng:nrhs","At least two inputs required.");
     }
     
     /* Check if compression level is commanded */
-    if(nrhs==3) {
+    if(nrhs>=3) {
         max_probes = mxGetScalar(prhs[2]);
+    }
+    
+    /* Check if image resolution is commanded */
+    if(nrhs>=4) {
+        dpm = ((double)mxGetScalar(prhs[3])*39.36996);
     }
     
     /* Check probes range */
@@ -117,7 +126,7 @@ void mexFunction( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
     
     /* Encode PNG in memory */
     // Parameter "3" implies RGB pixel format
-    outdata = tdefl_write_image_to_png_file_in_memory_ex(imgdata, width, height, 3, &filelen, max_probes, MZ_FALSE);
+    outdata = tdefl_write_image_to_png_file_in_memory_ex(imgdata, width, height, 3, dpm, &filelen, max_probes, MZ_FALSE);
 	
     /* Write to file */
     file = fopen(filename, "wb" );
