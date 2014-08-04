@@ -7,7 +7,7 @@ PNG encoding is based on public-domain [MINIZ library](http://code.google.com/p/
 ## Usage
 
 ```matlab
-savepng(CDATA,filename[,Compression])
+savepng(CDATA,filename[,Compression[,Resolution]])
 ```
 
 Where,
@@ -15,6 +15,7 @@ Where,
 * `CDATA` is a standard MatLab image m-by-n-by-3 matrix. This matrix can be obtained using `getframe` command or, for a faster implementation, [undocumented hardcopy command](http://www.mathworks.com/support/solutions/en/data/1-3NMHJ5/)
 * `filename` file name of the image to write. Don't forget to add .png to the file name.
 * `Compression` Optional input argument. This argument takes on a number between 0 and 10 controlling the amount of compression. 0 implies no compresson, fastest option (though with more I/O this is not neccessarily the fastest option). 10 implies the highest level of compression, slowest option. Default value is 4.
+* `Resolution` Optional input argument. This argument specifies the resolution of the file being saved. Resolution is expressed in Dots-Per-Inch (DPI). Default resolution is 96 DPI.
 
 ## Speed and File Size Comparison
 

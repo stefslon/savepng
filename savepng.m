@@ -11,8 +11,9 @@ function savepng(CDATA,filename,varargin) %#ok<INUSD>
 %                       no compresson, fastest option. 10 implies the most
 %                       amount of compression, slowest option. Default
 %                       value is 4.
-%       Resolution      A number expressed in Dots-Per-Inch (DPI) that gets 
-%                       embedded into a saved file. Default resolution is 96 DPI.
+%       Resolution      This argument specifies the resolution of the file 
+%                       being saved. Resolution is expressed in Dots-Per-Inch 
+%                       (DPI). Default resolution is 96 DPI.
 %
 %   Example 1:
 %       img     = getframe(gcf);
