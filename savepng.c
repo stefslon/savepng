@@ -100,18 +100,13 @@ void mexFunction( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
     
     /* Fetch output filename */
     filenamelen = mxGetN(prhs[1])*sizeof(mxChar)+1;
-    filename = mxMalloc(filenamelen);
+    filename = (char *)mxMalloc(filenamelen);
     mxGetString(prhs[1], filename, (mwSize)filenamelen);
     
-    /* some debug information */
-    // mexPrintf("Input dimensions %d by %d \n",width,height);
-    // mexPrintf("Dimensions from array %d, %d, %d \n",dim_array[0],dim_array[1],dim_array[2]);
-    // mexPrintf("Input filename %s \n",filename);
-    
     /* Convert MatLab image to raw pixels */
-    // indata format: RRRRRR..., GGGGGG..., BBBBBB...
-    // outdata format: RGB, RGB, RGB, ... 
-    imgdata = mxMalloc(width * height * 3);
+    /* indata format: RRRRRR..., GGGGGG..., BBBBBB... */
+    /* outdata format: RGB, RGB, RGB, ... */
+    imgdata = (unsigned char *)mxMalloc(width * height * 3);
     idx = 0;
     for(y = 0; y < height; y++)
     {
@@ -120,17 +115,17 @@ void mexFunction( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
             imgdata[idx++] = indata[x*height + y]; /* red */
             imgdata[idx++] = indata[1*width*height + x*height + y]; /* green */
             imgdata[idx++] = indata[2*width*height + x*height + y]; /* blue */
-            //imgdata[idx++] = 255;               /* alpha */
+            /*imgdata[idx++] = 255;*/              /* alpha */
         }
     }    
     
     /* Encode PNG in memory */
-    // Parameter "3" implies RGB pixel format
-    outdata = tdefl_write_image_to_png_file_in_memory_ex(imgdata, width, height, 3, dpm, &filelen, max_probes, MZ_FALSE);
+    /* Parameter "3" implies RGB pixel format */
+    outdata = (unsigned char * )tdefl_write_image_to_png_file_in_memory_ex(imgdata, width, height, 3, dpm, &filelen, max_probes, MZ_FALSE);
 	
     /* Write to file */
     file = fopen(filename, "wb" );
-    if(!file) return 0;
+    if(!file) return;
     fwrite((char*)outdata, 1, filelen, file);
     fclose(file);
 
