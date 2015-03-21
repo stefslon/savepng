@@ -40,7 +40,7 @@ function savepng(CDATA,filename,varargin) %#ok<INUSD>
 
 % Compile string
 try
-    mex savepng.c -DMINIZ_NO_TIME -DMINIZ_NO_ARCHIVE_APIS -DMINIZ_NO_ARCHIVE_WRITING_APIS -DMINIZ_NO_ZLIB_APIS -DMINIZ_NO_ZLIB_COMPATIBLE_NAMES
+    mex savepng.cpp -DMINIZ_NO_TIME -DMINIZ_NO_ARCHIVE_APIS -DMINIZ_NO_ARCHIVE_WRITING_APIS -DMINIZ_NO_ZLIB_APIS -DMINIZ_NO_ZLIB_COMPATIBLE_NAMES
 catch
     error('Sorry, auto-compilation failed.');
 end

@@ -107,7 +107,8 @@ void mexFunction( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
     /* indata format: RRRRRR..., GGGGGG..., BBBBBB... */
     /* outdata format: RGB, RGB, RGB, ... */
     imgdata = (unsigned char *)mxMalloc(width * height * 3);
-    idx = 0;
+    
+    idx = 0;    
     for(y = 0; y < height; y++)
     {
         for(x = 0; x < width; x++) 
@@ -117,11 +118,11 @@ void mexFunction( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
             imgdata[idx++] = indata[2*width*height + x*height + y]; /* blue */
             /*imgdata[idx++] = 255;*/              /* alpha */
         }
-    }    
+    }
     
     /* Encode PNG in memory */
     /* Parameter "3" implies RGB pixel format */
-    outdata = (unsigned char * )tdefl_write_image_to_png_file_in_memory_ex(imgdata, width, height, 3, dpm, &filelen, max_probes, MZ_FALSE);
+    outdata = (unsigned char * )tdefl_write_image_to_png_file_in_memory_ex((unsigned char *)imgdata, width, height, 3, dpm, &filelen, max_probes, MZ_FALSE);
 	
     /* Write to file */
     file = fopen(filename, "wb" );
