@@ -42,10 +42,10 @@ void mexFunction( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
 {
     unsigned char *imgdata;         /* packed raw pixel matrix */
     unsigned char *indata;          /* input image data matrix */
-    unsigned width, height;         /* size of matrix */
+    unsigned width, height, nchan;  /* size of matrix */
     unsigned char max_probes;       /* compression level */
     const mwSize *dim_array; 
-    unsigned x, y, chan, idx;
+    unsigned x, y, idx;
     unsigned dpm;                   /* dots per meter */
     unsigned char *outdata;
     FILE* file;
@@ -76,28 +76,25 @@ void mexFunction( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
     }
     
     /* Check probes range */
-    if((max_probes<0) || (max_probes>4095)) {
-        mexErrMsgIdAndTxt("savepng:nrhs","Compression level must be between 0 and 4095.");
+    if((max_probes<0) || (max_probes>10)) {
+        mexErrMsgIdAndTxt("savepng:nrhs","Compression level must be between 0 and 10.");
     }
     
     /* Get the number of dimensions in the input argument. */
     dim_array = mxGetDimensions(prhs[0]);
     
-    if((!mxIsUint8(prhs[0])) || (mxGetNumberOfDimensions(prhs[0])!=3) || (dim_array[2]!=3)) {
-        mexErrMsgIdAndTxt("savepng:nrhs","Input must in the image data format of MxNx3 matrix of uint8.");
+    if((!mxIsUint8(prhs[0])) || (mxGetNumberOfDimensions(prhs[0])!=3) || !(dim_array[2]==3 || dim_array[2]==4)) {
+        mexErrMsgIdAndTxt("savepng:nrhs","Input must in the image data format of MxNx3 or MxNx4 matrix of uint8.");
     }
 
     /* Pointer to image input data */
     indata = (unsigned char *)mxGetPr(prhs[0]); 
 
     /* Get dimensions of input matrices */
-    height = mxGetM(prhs[0]);  
-    width = mxGetN(prhs[0])/3;     /* this dimension concatenates with the 3rd dimension */
-    
-    if(!mxIsUint8(prhs[0])) {
-        mexErrMsgIdAndTxt("savepng:nrhs","Input must in the image data format of MxNx3 matrix of uint8.");
-    }
-    
+    nchan = dim_array[2];
+    height = dim_array[0];  
+    width = dim_array[1];     /* this dimension concatenates with the 3rd dimension */
+
     /* Fetch output filename */
     filenamelen = mxGetN(prhs[1])*sizeof(mxChar)+1;
     filename = (char *)mxMalloc(filenamelen);
@@ -106,23 +103,24 @@ void mexFunction( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
     /* Convert MatLab image to raw pixels */
     /* indata format: RRRRRR..., GGGGGG..., BBBBBB... */
     /* outdata format: RGB, RGB, RGB, ... */
-    imgdata = (unsigned char *)mxMalloc(width * height * 3);
+    imgdata = (unsigned char *)mxMalloc(width * height * nchan);
     
     idx = 0;    
     for(y = 0; y < height; y++)
     {
         for(x = 0; x < width; x++) 
         {
-            imgdata[idx++] = indata[x*height + y]; /* red */
-            imgdata[idx++] = indata[1*width*height + x*height + y]; /* green */
-            imgdata[idx++] = indata[2*width*height + x*height + y]; /* blue */
-            /*imgdata[idx++] = 255;*/              /* alpha */
+            imgdata[idx++] = indata[x*height + y];                      /* red */
+            imgdata[idx++] = indata[1*width*height + x*height + y];     /* green */
+            imgdata[idx++] = indata[2*width*height + x*height + y];     /* blue */
+            if (nchan==4)
+            	imgdata[idx++] = indata[3*width*height + x*height + y]; /* alpha */
         }
     }
     
     /* Encode PNG in memory */
     /* Parameter "3" implies RGB pixel format */
-    outdata = (unsigned char * )tdefl_write_image_to_png_file_in_memory_ex((unsigned char *)imgdata, width, height, 3, dpm, &filelen, max_probes, MZ_FALSE);
+    outdata = (unsigned char * )tdefl_write_image_to_png_file_in_memory_ex((unsigned char *)imgdata, width, height, nchan, dpm, &filelen, max_probes, MZ_FALSE);
 	
     /* Write to file */
     file = fopen(filename, "wb" );

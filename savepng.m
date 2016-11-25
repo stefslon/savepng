@@ -37,6 +37,7 @@ function savepng(CDATA,filename,varargin) %#ok<INUSD>
 %   03/14/2014, Brought miniz.c to the latest version r63 (from Oct 13, 2013)
 %               Changed compression limits from 0 to 10 to align with miniz
 %   08/04/2014, Added option to command image resolution in DPI
+%   11/25/2016, Added support for alpha channel
 
 % Compile string
 try
